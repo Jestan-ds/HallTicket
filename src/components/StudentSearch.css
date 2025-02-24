@@ -1,0 +1,72 @@
+/* Container Styling */
+.w-full {
+    width: 100%;
+  }
+  
+  .max-w-md {
+    max-width: 28rem;
+  }
+  
+  .mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .p-6 {
+    padding: 1.5rem;
+  }
+  
+  /* Flexbox for Search Input and Button */
+  .flex {
+    display: flex;
+  }
+  
+  .gap-2 {
+    gap: 0.5rem;
+  }
+  
+  /* Input Field Styling */
+  input[type="text"] {
+    flex-grow: 1;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    outline: none;
+  }
+  
+  input[type="text"]:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+  
+  /* Button Styling */
+  button {
+    padding: 0.5rem 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #2563eb;
+  }
+  
+  button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+  
+  /* Icon Size */
+  .w-5 {
+    width: 1.25rem;
+  }
+  
+  .h-5 {
+    height: 1.25rem;
+  }
+  

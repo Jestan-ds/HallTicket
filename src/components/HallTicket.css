@@ -1,0 +1,195 @@
+/* Container Styling */
+.w-\[21cm\] {
+    width: 21cm;
+  }
+  
+  .min-h-\[29.7cm\] {
+    min-height: 29.7cm;
+  }
+  
+  .bg-white {
+    background-color: white;
+  }
+  
+  .p-8 {
+    padding: 2rem;
+  }
+  
+  .mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Border Styling */
+  .border-2 {
+    border-width: 2px;
+  }
+  
+  .border-gray-800 {
+    border-color: #2d3748;
+  }
+  
+  .p-6 {
+    padding: 1.5rem;
+  }
+  
+  /* Header Section */
+  .flex {
+    display: flex;
+  }
+  
+  .justify-between {
+    justify-content: space-between;
+  }
+  
+  .items-start {
+    align-items: flex-start;
+  }
+  
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .gap-4 {
+    gap: 1rem;
+  }
+  
+  .w-16 {
+    width: 4rem;
+  }
+  
+  .h-16 {
+    height: 4rem;
+  }
+  
+  .object-contain {
+    object-fit: contain;
+  }
+  
+  .text-2xl {
+    font-size: 1.5rem;
+  }
+  
+  .font-bold {
+    font-weight: bold;
+  }
+  
+  .text-lg {
+    font-size: 1.125rem;
+  }
+  
+ /* Add this CSS to your HallTicket.css or another appropriate CSS file */
+/* Add this CSS to your HallTicket.css or another appropriate CSS file */
+.QRCodeSVG {
+  margin-top: 1rem; /* Ensure there's space between the photo and QR code */
+}
+
+.w-32 {
+  width: 8rem;
+}
+
+.h-40 {
+  height: 10rem;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+  
+  /* Student Info Section */
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .gap-4 {
+    gap: 1rem;
+  }
+  
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .flex.justify-end {
+    justify-content: flex-end;
+  }
+  
+  .w-32 {
+    width: 8rem;
+  }
+  
+  .h-40 {
+    height: 10rem;
+  }
+  
+  .object-cover {
+    object-fit: cover;
+  }
+  
+  .border-2 {
+    border-width: 2px;
+  }
+  
+  .border-gray-400 {
+    border-color: #cbd5e0;
+  }
+  
+  .text-gray-400 {
+    color: #cbd5e0;
+  }
+  
+  /* Table Styling */
+  .w-full {
+    width: 100%;
+  }
+  
+  .border-collapse {
+    border-collapse: collapse;
+  }
+  
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .bg-gray-100 {
+    background-color: #f7fafc;
+  }
+  
+  .border {
+    border: 1px solid #e2e8f0;
+  }
+  
+  .p-2 {
+    padding: 0.5rem;
+  }
+  
+  .text-gray-500 {
+    color: #6b7280;
+  }
+  /* Add this CSS to your HallTicket.css or another appropriate CSS file */
+/* Add this CSS to your HallTicket.css or another appropriate CSS file */
+h1 {
+  text-align: center;         /* Centers the text horizontally */
+  font-weight: bold;          /* Makes the text bold */
+  text-transform: uppercase;  /* Capitalizes all letters */
+  display: flex;
+  justify-content: center;    /* Centers content in a flex container */
+  align-items: center;        /* Vertically centers the text */
+  height: 100%;                /* Ensures it fills the available space */
+}
+
+  
+/* Update the container CSS if necessary */
+div.flex {
+  justify-content: center;  /* Centers the content horizontally */
+  align-items: center;      /* Centers vertically if needed */
+  text-align: center;       /* Ensure text inside the div is centered */
+}
