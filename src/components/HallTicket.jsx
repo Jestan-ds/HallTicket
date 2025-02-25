@@ -3,7 +3,7 @@ import { QRCodeCanvas } from "qrcode.react";
 
 
 export const HallTicket = ({ student }) => {
-  const studentURL = `http://192.168.0.150:3000/hallticket/${student.studentId}`;
+  const studentURL = `https://hall-ticket-abhimo.vercel.app/hallticket/${student.studentId}`;
   
   return (
     <div className="w-[21cm] min-h-[29.7cm] bg-white p-8 mx-auto shadow-lg border">
