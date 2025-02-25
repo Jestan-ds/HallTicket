@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
-import './components/StudentSearch.css';
+
 
 export const StudentSearch = ({ students, onStudentSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');

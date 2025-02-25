@@ -5,9 +5,6 @@ import FileUpload from './components/FileUpload';
 import {StudentSearch} from './components/StudentSearch';
 import {HallTicket} from './components/HallTicket';
 import { Printer } from 'lucide-react';
-import './components/HallTicket.css';
-import './components/FileUpload.css';
-import './components/StudentSearch.css';
 
 
 function HallTicketPage() {
