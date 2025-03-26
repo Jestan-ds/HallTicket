@@ -5,10 +5,13 @@
 
 // export default db
 
-import { drizzle } from "drizzle-orm/mysql2";
+import { drizzle, MySql2Database } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
+import * as schema from "./schema";
 
-const pool = mysql.createPool({
+
+async function initDB() {
+const connection = await mysql.createConnection({
   host: "localhost", // Use your MariaDB server (IP/Hostname)
   user: "root",
   password: "root",
@@ -16,4 +19,12 @@ const pool = mysql.createPool({
   port: 3306, // Default MariaDB/MySQL port
 });
 
-export const db = drizzle(pool);
+const db = drizzle(connection, { schema,mode:"default"});
+return db;
+}
+let db: MySql2Database<typeof schema>;
+initDB().then((database) => {
+  db = database;
+});
+
+export { db };

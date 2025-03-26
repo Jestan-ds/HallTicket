@@ -66,3 +66,18 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 }
 
+export const getUser = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.id;
+        const user = await db.select().from(users).where(eq(users.id, Number(userId)));
+        if (user.length === 0) {
+            return res.status(400).json({ error: "User not found!" });
+        }
+        res.json(user);
+    } catch (error) {
+        console.error("Error getting user:", error); // Log error for debugging
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+

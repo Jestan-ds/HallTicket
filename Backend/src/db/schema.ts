@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
-import { check,mysqlTable, varchar, int, text, foreignKey, date, timestamp, mysqlEnum, time, decimal, datetime } from "drizzle-orm/mysql-core";
-import { application } from "express";
+import {check,mysqlTable, varchar, int, text,  date, timestamp, mysqlEnum, time, decimal, datetime } from "drizzle-orm/mysql-core";
+
+
 
 // Students Table
 export const students = mysqlTable("students", {
@@ -47,19 +48,36 @@ export const users = mysqlTable("users",{
   ]
 )
 
-export const exams = mysqlTable("exams",{
-  id:varchar("id",{length:50}).primaryKey(),
-  name:varchar("name",{length:250}).notNull().unique(),
-  exam_date:date("exam_date").notNull(),
-  exam_time:time("exam_time").notNull(),
-  exam_duration:varchar("exam_duration",{length:250}).notNull(),
-  exam_fee: decimal("fee", { precision: 10, scale: 2 }).notNull(), // Course Fee ($50)
-  exam_registrationEndDate: date("registration_end_date").notNull(), // Last Date for Registration
-  exam_category: varchar("category", { length: 100 }).notNull(), // Course Category (e.g., "Mathematics")
-  exam_description: text("description").notNull(), // Detailed Course Description
-  exam_prerequisites: text("prerequisites"), // Course Prerequisites
-  exam_createdAt:timestamp('exam_createdAt').notNull().defaultNow()
-})
+// export const exams = mysqlTable("exams",{
+//   id:varchar("id",{length:50}).primaryKey(),
+//   name:varchar("name",{length:250}).notNull().unique(),
+//   exam_date:date("exam_date").notNull(),
+//   exam_time:time("exam_time").notNull(),
+//   exam_duration:varchar("exam_duration",{length:250}).notNull(),
+//   exam_fee: decimal("fee", { precision: 10, scale: 2 }).notNull(), // Course Fee ($50)
+//   exam_registrationEndDate: date("registration_end_date").notNull(), // Last Date for Registration
+//   exam_category: varchar("category", { length: 100 }).notNull(), // Course Category (e.g., "Mathematics")
+//   exam_description: text("description").notNull(), // Detailed Course Description
+//   exam_prerequisites: text("prerequisites"), // Course Prerequisites
+//   exam_createdAt:timestamp('exam_createdAt').notNull().defaultNow()
+// })
+
+export const exams = mysqlTable("exams", {
+  id: varchar("id", { length: 50 }).primaryKey(),
+  name: varchar("name", { length: 250 }).notNull().unique(),
+  exam_mode: mysqlEnum("exam_mode", ["online", "offline"]).notNull().default("offline"),
+  exam_time_selection: mysqlEnum("exam_time_selection", ["fixed", "flexible"]).notNull().default("fixed"), // New column
+  exam_date: date("exam_date").notNull(),
+  exam_time: time("exam_time").notNull(), // If "fixed", this will be used
+  exam_duration: varchar("exam_duration", { length: 250 }).notNull(),
+  exam_fee: decimal("fee", { precision: 10, scale: 2 }).notNull(),
+  exam_registrationEndDate: date("registration_end_date").notNull(),
+  exam_category: varchar("category", { length: 100 }).notNull(),
+  exam_description: text("description").notNull(),
+  exam_prerequisites: text("prerequisites"),
+  exam_createdAt: timestamp("exam_createdAt").notNull().defaultNow(),
+});
+
 
 export const examLocations = mysqlTable("exam_locations", {
   id: int("id").primaryKey().autoincrement(),
@@ -77,15 +95,18 @@ export const preferredLocations = mysqlTable("preferred_locations", {
   preference_2: varchar("preference_2", { length: 255 }).notNull(),
   preference_3: varchar("preference_3", { length: 255 }).notNull(),
 });
-
 export const registeredExams = mysqlTable("registered_exams", {
   id: varchar("id", { length: 50 }).primaryKey(),
   application_id: varchar("application_id", { length: 50 }).notNull().unique(),
   user_id: int("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   exam_id: varchar("exam_id", { length: 50 }).notNull().references(() => exams.id, { onDelete: "cascade" }),
-  assigned_location: varchar("assigned_location", { length: 255 }).notNull(),
-  seat_number: varchar("seat_number", { length: 10 }).notNull(),
+  exam_mode: mysqlEnum("exam_mode", ["online", "offline"]).notNull(), // Stores mode of exam
+  assigned_location: varchar("assigned_location", { length: 255 }), // NULL if online
+  seat_number: varchar("seat_number", { length: 10 }), // NULL if online
+  selected_exam_time: time("selected_exam_time"), // NULL if offline
   status: mysqlEnum("status", ["approved", "pending", "rejected"]).notNull().default("pending"),
   applied_at: timestamp("applied_at").notNull().defaultNow(),
   hall_ticket_url: text("hall_ticket_url"),
 });
+
+
