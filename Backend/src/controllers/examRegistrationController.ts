@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { db } from '../db';
-import { exams, examLocations, registeredExams, users } from '../db/schema';
+import { exams, examLocations, registeredExams, usersDetails } from '../db/schema';
 import { eq, and } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,7 +12,7 @@ export const examRegistration = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "All fields are required!" });
     }
 
-    const user = await db.select().from(users).where(eq(users.email, email));
+    const user = await db.select().from(usersDetails).where(eq(usersDetails.email, email));
     if (!user.length) {
       return res.status(400).json({ error: "User not found!" });
     }

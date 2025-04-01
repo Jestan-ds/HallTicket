@@ -1,15 +1,24 @@
 import express from "express";
-import { createExams, editExams, getExams } from "../controllers/examController";
+import { createExams, deleteExams, editExams, getExam, getExams } from "../controllers/examController";
+import { authenticate, authorize } from "../middleware/authMiddleware";
+
 
 const examRouter = express.Router();
 
-examRouter.get("/exams",getExams); 
-examRouter.post("/exams",async (req, res) => {
+examRouter.get("/",authenticate,getExams); 
+examRouter.post("/create",authenticate,authorize(["admin"]),async (req, res) => {
     await createExams(req, res)
 });
 
-examRouter.patch("/exams/:id",async (req, res) => {
+examRouter.put("/:id",async (req, res) => {
     await editExams(req, res)
 });
 
+examRouter.delete("/:id",async (req, res) => {
+    await deleteExams(req, res)
+});
+
+examRouter.get("/:id",async (req, res) => {
+    await getExam(req, res)
+});
 export default examRouter;

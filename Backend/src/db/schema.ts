@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import {check,mysqlTable, varchar, int, text,  date, timestamp, mysqlEnum, time, decimal, datetime } from "drizzle-orm/mysql-core";
+import {check,mysqlTable, varchar, int, text,  date, timestamp, mysqlEnum, time, decimal, datetime, boolean } from "drizzle-orm/mysql-core";
 
 
 
@@ -29,19 +29,19 @@ export const courses = mysqlTable("courses", {
   dateTime: varchar("dateTime", { length: 255 }), // Store date as string
 });
 
-export const users = mysqlTable("users",{
+export const usersDetails = mysqlTable("usersDetails",{
   id: int("id").primaryKey().autoincrement(),
+  authId: int("authId").notNull().unique().references(() => usersAuth.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }).notNull(),
+  phone: varchar("phone", { length: 10 }).notNull(),
+  dob: date("dob").notNull(),
+  gender: mysqlEnum("gender", ["male", "female", "other"]).notNull(),
+  address: varchar("address", { length: 255 }).notNull(),
+  city: varchar("city", { length: 255 }).notNull(),
+  state: varchar("state", { length: 255 }).notNull(),
+  zipCode: varchar("zipCode", { length: 10 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
-  password: varchar("password", { length: 255 }).notNull(),
-  phone:varchar("phone", { length: 10 }).notNull(),
-  dob:date("dob").notNull(),
-  gender:mysqlEnum("gender",["male","female","other"]).notNull(),
-  address:varchar("address", { length: 255 }).notNull(),
-  city:varchar("city", { length: 255 }).notNull(),
-  state:varchar("state", { length: 255 }).notNull(),
-  zipCode:varchar("zipCode", { length: 10 }).notNull(),
-  createdAt:timestamp("createdAt").notNull().default(sql`CURRENT_TIMESTAMP`),
+  createdAt: timestamp("createdAt").notNull().default(sql`CURRENT_TIMESTAMP`),
 },
   (table) => [
     check("phone_no_check",sql`LENGTH(${table.phone})=10`),
@@ -68,7 +68,7 @@ export const exams = mysqlTable("exams", {
   exam_mode: mysqlEnum("exam_mode", ["online", "offline"]).notNull().default("offline"),
   exam_time_selection: mysqlEnum("exam_time_selection", ["fixed", "flexible"]).notNull().default("fixed"), // New column
   exam_date: date("exam_date").notNull(),
-  exam_time: time("exam_time").notNull(), // If "fixed", this will be used
+  exam_time: time("exam_time"), // If "fixed", this will be used
   exam_duration: varchar("exam_duration", { length: 250 }).notNull(),
   exam_fee: decimal("fee", { precision: 10, scale: 2 }).notNull(),
   exam_registrationEndDate: date("registration_end_date").notNull(),
@@ -89,7 +89,7 @@ export const examLocations = mysqlTable("exam_locations", {
 
 export const preferredLocations = mysqlTable("preferred_locations", {
   id: int("id").primaryKey().autoincrement(),
-  user_id: int("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  user_id: int("user_id").notNull().references(() => usersDetails.id, { onDelete: "cascade" }),
   exam_id: varchar("exam_id", { length: 50 }).notNull().references(() => exams.id, { onDelete: "cascade" }),
   preference_1: varchar("preference_1", { length: 255 }).notNull(),
   preference_2: varchar("preference_2", { length: 255 }).notNull(),
@@ -98,7 +98,7 @@ export const preferredLocations = mysqlTable("preferred_locations", {
 export const registeredExams = mysqlTable("registered_exams", {
   id: varchar("id", { length: 50 }).primaryKey(),
   application_id: varchar("application_id", { length: 50 }).notNull().unique(),
-  user_id: int("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  user_id: int("user_id").notNull().references(() => usersDetails.id, { onDelete: "cascade" }),
   exam_id: varchar("exam_id", { length: 50 }).notNull().references(() => exams.id, { onDelete: "cascade" }),
   exam_mode: mysqlEnum("exam_mode", ["online", "offline"]).notNull(), // Stores mode of exam
   assigned_location: varchar("assigned_location", { length: 255 }), // NULL if online
@@ -109,4 +109,11 @@ export const registeredExams = mysqlTable("registered_exams", {
   hall_ticket_url: text("hall_ticket_url"),
 });
 
+export const usersAuth = mysqlTable("usersAuth", {
+  id: int("id").primaryKey().autoincrement(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  password: varchar("password", { length: 255 }).notNull(),
+  role: mysqlEnum("role", ["admin", "student", "superadmin"]).notNull().default("student"),
+  isVerified: boolean("isVerified").default(false),
+});
 

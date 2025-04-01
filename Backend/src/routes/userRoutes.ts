@@ -1,19 +1,16 @@
-import express from "express"
-import { registerUser,loginUser, getUser } from "../controllers/userController"
+import express from "express";
+import { addUserDetails } from "../controllers/userController";
+import { authenticate } from "../middleware/authMiddleware";
 
-const userRouter = express.Router()
+const router = express.Router();
 
-userRouter.post("/register", async (req, res) => {
-    await registerUser(req, res)
-})
+router.post("/add-user-details", authenticate, async (req, res) => {
+  try {
+    await addUserDetails(req, res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error adding user details" });
+  }
+});
 
-userRouter.post("/login", async (req, res) => {
-    await loginUser(req, res)
-})
-
-userRouter.get("/user", async (req, res) => {
-    await getUser(req, res)
-})
-
-
-export default userRouter
+export default router;

@@ -11,6 +11,10 @@ import Navbar from './components/Navbar';
 import ExamRegistration from './components/ExamRegistration';
 import RegisteredExams from './components/RegisteredExams';
 import Profile from './components/Profile';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import OTPVerification from './components/OTPVerification';
+import { Navigate } from 'react-router-dom';
 
 
 function HallTicketPage() {
@@ -92,8 +96,11 @@ function App() {
             </div>
           </div>
         } /> */}
-
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/verify-otp" element={<OTPVerification />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+          {/* <Route path="/" element={<Dashboard />} /> */}
           <Route path="/register-exam" element={<ExamRegistration />} />
           <Route path="/my-exams" element={<RegisteredExams />} />
           <Route path="/profile" element={<Profile />} />
