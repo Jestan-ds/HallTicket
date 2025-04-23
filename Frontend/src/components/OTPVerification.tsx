@@ -18,7 +18,7 @@ function OTPVerification() {
 
     try {
       // Replace with your custom OTP verification endpoint
-      const response = await fetch('YOUR_AUTH_API/verify-otp', {
+      const response = await fetch('http://localhost:5000/api/auth/verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ function OTPVerification() {
       }
 
       // Navigate to dashboard or home page after successful verification
-      navigate('/dashboard');
+      navigate('/login');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid OTP. Please try again.');
     } finally {

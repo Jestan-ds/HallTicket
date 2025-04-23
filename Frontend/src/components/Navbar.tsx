@@ -31,7 +31,7 @@ const Navbar = () => {
           
           {/* Desktop menu */}
           <div className="hidden md:flex space-x-4">
-            <Link to="/" className={`flex items-center px-3 py-2 rounded ${isActive('/')}`}>
+            <Link to="/dashboard" className={`flex items-center px-3 py-2 rounded ${isActive('/')}`}>
               <Home className="h-5 w-5 mr-1" />
               <span>Dashboard</span>
             </Link>

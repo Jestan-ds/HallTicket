@@ -1,5 +1,5 @@
 import express from "express";
-import { register, login, verifyEmail, logout } from "../controllers/authController";
+import { register, login, verifyEmail, logout, forgotPassword, verifyOtp, resetPassword, getUserAuthDetails, checkAuth } from "../controllers/authController";
 
 const router = express.Router();
 
@@ -36,6 +36,37 @@ router.post("/logout", async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Logout error" });    
   }
+});
+
+router.post("/forgot-password", async (req, res) => {
+  await forgotPassword(req, res);
+});
+
+ router.post("/verify-otp", async (req, res) => {
+  await verifyOtp(req, res);
+});
+
+router.post("/reset-password", async (req, res) => {
+  try {
+    await resetPassword(req, res);
+  } catch (error) { 
+    console.error(error);
+    res.status(500).json({ error: "Error resetting password" });
+  }
+});
+
+router.get("/:id",async(req, res) => {
+  try {
+    await getUserAuthDetails(req, res);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching user details" });
+  }
+})
+
+router.get("/check-auth", async (req, res) => {
+   await checkAuth(req,res)
 });
 
 export default router;

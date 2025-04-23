@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Ticket, LogIn } from 'lucide-react';
 
-function Login() {
+function Login({ setIsAuthenticated }: { setIsAuthenticated: (authenticated: boolean) => void }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -18,35 +18,31 @@ function Login() {
 
     try {
       // Replace with your custom authentication API endpoint
-      const response = await fetch('YOUR_AUTH_API/login', {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
+
+      if(response.ok){
+        setIsAuthenticated(true);
+       
+      }
+      else{
+        console.log("Login failed")
+      }
 
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
-
+      navigate('/dashboard'); // Redirect to dashboard or home page after successful login
       // Generate and send OTP
-      const otpResponse = await fetch('YOUR_AUTH_API/generate-otp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${data.token}`, // If your API uses token-based auth
-        },
-        body: JSON.stringify({ email: formData.email }),
-      });
-
-      if (!otpResponse.ok) {
-        throw new Error('Failed to send OTP');
-      }
-
-      navigate('/verify-otp', { state: { email: formData.email } });
+      
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during login');
     } finally {

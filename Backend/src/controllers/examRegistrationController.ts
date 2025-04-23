@@ -6,9 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const examRegistration = async (req: Request, res: Response) => {
   try {
-    const { name, email, phone, dob, exam_id, locationPreferences, exam_mode, selected_exam_time } = req.body;
+    const { email,  exam_id, locationPreferences, exam_mode, selected_exam_time } = req.body;
 
-    if (!name || !email || !phone || !dob || !exam_id || !exam_mode) {
+    if ( !email || !exam_id || !exam_mode) {
       return res.status(400).json({ error: "All fields are required!" });
     }
 
@@ -54,6 +54,7 @@ export const examRegistration = async (req: Request, res: Response) => {
       if (!assignedLocation || seatNumber === null) {
         return res.status(400).json({ error: "No seats available in preferred locations." });
       }
+
 
       // Insert offline exam registration
       const newRegistration = {
