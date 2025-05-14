@@ -1,5 +1,5 @@
 import express from "express";
-import { createExams, deleteExams, editExams, getExam, getExams } from "../controllers/examController";
+import { createExams, deleteExams, editExams, getExam, getExams, getRegistrationCounts, getTotalStudents } from "../controllers/examController";
 import { authenticate, authorize } from "../middleware/authMiddleware";
 
 
@@ -21,4 +21,11 @@ examRouter.delete("/:id",async (req, res) => {
 examRouter.get("/:id",async (req, res) => {
     await getExam(req, res)
 });
+examRouter.get("/admin/getStudents",async (req, res) => {
+    getTotalStudents(req, res)
+});
+examRouter.get("/admin/getRegistrations",async (req, res) => {
+    getRegistrationCounts(req, res)
+})
+
 export default examRouter;

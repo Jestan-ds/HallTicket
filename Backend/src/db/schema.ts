@@ -1,18 +1,40 @@
 import { sql } from "drizzle-orm";
-import {check,mysqlTable, varchar, int, text,  date, timestamp, mysqlEnum, time, decimal, datetime, boolean } from "drizzle-orm/mysql-core";
-
+import {check,mysqlTable, varchar, int, text,  date, timestamp, mysqlEnum, time, decimal, datetime, boolean,primaryKey } from "drizzle-orm/mysql-core";
 
 
 // Students Table
-export const students = mysqlTable("students", {
-  id: int("id").primaryKey().autoincrement(),
-  usn: varchar("usn", { length: 50 }).notNull().unique(),
-  studentId: varchar("studentId", { length: 50 }).unique().notNull(),
-  name: varchar("name", { length: 100 }).notNull(),
-  program: varchar("program", { length: 100 }).notNull(),
-  college: varchar("college", { length: 255 }).notNull(),
-  examCenter: varchar("examCenter", { length: 255 }).notNull(),
-  photo: text("photo"), // Store image URL or base64 string
+// export const students = mysqlTable("students", {
+//   id: int("id").primaryKey().autoincrement(),
+//   usn: varchar("usn", { length: 50 }).notNull().unique(),
+//   studentId: varchar("studentId", { length: 50 }).unique().notNull(),
+//   name: varchar("name", { length: 100 }).notNull(),
+//   program: varchar("program", { length: 100 }).notNull(),
+//   college: varchar("college", { length: 255 }).notNull(),
+//   examCenter: varchar("examCenter", { length: 255 }).notNull(),
+//   photo: text("photo"), // Store image URL or base64 string
+// });
+
+export const students = mysqlTable('students', {
+  id: int('id').autoincrement().primaryKey(),
+  rollNumber: varchar('roll_number', { length: 255 }).unique().notNull(),
+  examName: varchar('exam_name', { length: 255 }), // Added Exam_Name
+  applicationNumber: varchar('application_number', { length: 255 }).unique(),
+  studentName: varchar('student_name', { length: 255 }).notNull(),
+  fatherName: varchar('father_name', { length: 255 }),
+  motherName: varchar('mother_name', { length: 255 }),
+  dob: varchar('dob', { length: 255 }),
+  category: varchar('category', { length: 255 }),
+  gender: varchar('gender', { length: 255 }),
+  pwd: varchar('pwd', { length: 255 }),
+  examDate: varchar('exam_date', { length: 255 }),
+  examShift: varchar('exam_shift', { length: 255 }),
+  reportingTime: varchar('reporting_time', { length: 255 }),
+  gateClosingTime: varchar('gate_closing_time', { length: 255 }),
+  examTiming: varchar('exam_timing', { length: 255 }),
+  centreName: text('centre_name'),
+  centreAddress: text('centre_address'),
+  photoPath: varchar('photo_path', { length: 255 }), // Stores Cloudinary URL
+  signaturePath: varchar('signature_path', { length: 255 }), // Stores Cloudinary URL
 });
 
 // Courses Table (linked to students)
@@ -20,7 +42,7 @@ export const courses = mysqlTable("courses", {
   id: int("id").primaryKey().autoincrement(),
   studentId: varchar("studentId", { length: 50 })
     .notNull()
-    .references(() => students.studentId, { onDelete: "cascade" }),
+    .references(() => students.id, { onDelete: "cascade" }),
   slNo: int("slNo").notNull(),
   sem: int("sem").notNull(),
   courseCode: varchar("courseCode", { length: 50 }).notNull(),
@@ -48,19 +70,6 @@ export const usersDetails = mysqlTable("usersDetails",{
   ]
 )
 
-// export const exams = mysqlTable("exams",{
-//   id:varchar("id",{length:50}).primaryKey(),
-//   name:varchar("name",{length:250}).notNull().unique(),
-//   exam_date:date("exam_date").notNull(),
-//   exam_time:time("exam_time").notNull(),
-//   exam_duration:varchar("exam_duration",{length:250}).notNull(),
-//   exam_fee: decimal("fee", { precision: 10, scale: 2 }).notNull(), // Course Fee ($50)
-//   exam_registrationEndDate: date("registration_end_date").notNull(), // Last Date for Registration
-//   exam_category: varchar("category", { length: 100 }).notNull(), // Course Category (e.g., "Mathematics")
-//   exam_description: text("description").notNull(), // Detailed Course Description
-//   exam_prerequisites: text("prerequisites"), // Course Prerequisites
-//   exam_createdAt:timestamp('exam_createdAt').notNull().defaultNow()
-// })
 
 export const exams = mysqlTable("exams", {
   id: varchar("id", { length: 50 }).primaryKey(),
@@ -107,6 +116,7 @@ export const registeredExams = mysqlTable("registered_exams", {
   status: mysqlEnum("status", ["approved", "pending", "rejected"]).notNull().default("pending"),
   applied_at: timestamp("applied_at").notNull().defaultNow(),
   hall_ticket_url: text("hall_ticket_url"),
+  
 });
 
 export const usersAuth = mysqlTable("usersAuth", {
@@ -115,5 +125,30 @@ export const usersAuth = mysqlTable("usersAuth", {
   password: varchar("password", { length: 255 }).notNull(),
   role: mysqlEnum("role", ["admin", "student", "superadmin"]).notNull().default("student"),
   isVerified: boolean("isVerified").default(false),
+  name: varchar("name", { length: 255 }).notNull(),
 });
+
+export const notifications = mysqlTable('notifications', {
+  // Use varchar for UUIDs in MySQL, assuming application-side generation
+  id: varchar('id', { length: 36 }).primaryKey(), // UUIDs are typically 36 chars
+  message: text('message').notNull(),
+  // Target can be 'all' or a specific exam_id (string)
+  target: varchar('target', { length: 255 }).notNull(), // 'all' or exam_id (assuming exam_id is varchar(50))
+  created_at: timestamp('created_at').defaultNow().notNull(),
+  
+});
+
+// New: Linking table for user-specific notifications
+export const userNotifications = mysqlTable('user_notifications', {
+  notification_id: varchar('notification_id', { length: 36 }) // Reference notifications.id (varchar)
+    .references(() => notifications.id, { onDelete: 'cascade' }) // Cascade delete if notification is removed
+    .notNull(),
+  user_id: int('user_id') // Reference usersDetails.id (int)
+    .references(() => usersDetails.id, { onDelete: 'cascade' }) // Cascade delete if user is removed
+    .notNull(),
+  read_at: timestamp('read_at'), // Timestamp when the user read the notification
+}, (t) => ({
+  // Define a composite primary key for MySQL
+  pk: primaryKey(t.notification_id, t.user_id),
+}));
 

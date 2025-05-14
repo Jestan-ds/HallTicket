@@ -33,7 +33,7 @@ function OTPVerification() {
       }
 
       // Navigate to dashboard or home page after successful verification
-      navigate('/login');
+      navigate('/complete-profile', { state: { email } });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid OTP. Please try again.');
     } finally {

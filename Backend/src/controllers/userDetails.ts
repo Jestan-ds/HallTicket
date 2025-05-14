@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { db } from "../db"; // Adjust according to your DB configuration
-import { usersDetails } from "../db/schema";
+import { usersAuth, usersDetails } from "../db/schema";
 import { eq } from "drizzle-orm";
 
 // Fetch all user details
@@ -34,22 +34,23 @@ export const getUserDetailsById = async (req: Request, res: Response) => {
 // Create a new user detail
 export const createUserDetails = async (req: Request, res: Response) => {
   try {
-    const { authId, name, phone, dob, gender, address, city, state, zipCode, email } = req.body;
-    
-    if (!authId || !name || !phone || !dob || !gender || !address || !city || !state || !zipCode || !email) {
+    const { name, phone, dob, gender, address, city, state, zipCode, email } = req.body;
+    const authId = await db.select().from(usersAuth).where(eq(usersAuth.email, email));
+   
+    if ( !name || !phone || !dob || !gender || !address || !city || !state || !zipCode || !email) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
     const existingUser = await db
       .select()
       .from(usersDetails)
-      .where(eq(usersDetails.authId, authId)|| eq(usersDetails.email, email));
+      .where(eq(usersDetails.email, email));
     
     if (existingUser.length > 0) {
       return res.status(409).json({ error: "User with the same authId or email already exists" });
     }
     const [newUser] = await db.insert(usersDetails).values({
-      authId,
+      authId: authId[0].id,
       name,
       phone,
       dob,

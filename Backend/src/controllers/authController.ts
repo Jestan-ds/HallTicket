@@ -54,7 +54,7 @@ const otpStorage = new Map();
  */
 export const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password, role, name } = req.body;
 
     // Check if user already exists
     const existingUser = await db.select().from(usersAuth).where(eq(usersAuth.email, email));
@@ -85,6 +85,7 @@ export const register = async (req: Request, res: Response) => {
       password: hashedPassword,
       role,
       isVerified: false,
+      name,
     });
 
     res.status(201).json({ message: "OTP sent to email! Verify to complete registration." });
@@ -135,10 +136,19 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     if (!user.isVerified) return res.status(400).json({ message: "Email not verified" });
 
-    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign({ authId: user.id, role: user.role }, JWT_SECRET, { expiresIn: "1d" });
 
     res.cookie("authToken", token, COOKIE_OPTIONS);
-    res.json({ message: "Login successful!", token });
+    res.json({
+       message: "Login successful!", 
+       token,
+       user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+       }
+      });
 
   } catch (err: any) {
     res.status(500).json({ message: "Login error", error: err.message });

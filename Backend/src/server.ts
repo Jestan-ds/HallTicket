@@ -7,6 +7,7 @@ import examRouter from "./routes/examRoutes";
 import authRoutes from "./routes/authRoutes";
 import cookieParser from "cookie-parser";
 import userDetailsRouter from "./routes/userDetailsRoutes";
+import Notificationrouter from "./routes/notificationRoutes";
 
 dotenv.config();
 
@@ -32,7 +33,8 @@ app.use("/api/examRegistration",examRegistrationRouter)
 app.use("/api/exam",examRouter)
 
 app.use("/api/auth",authRoutes)
- app.use("/api/userDetails", userDetailsRouter); // Adjust the path as needed
+app.use("/api/userDetails", userDetailsRouter);
+app.use("/api/notifications", Notificationrouter); // Adjust the path as needed
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
