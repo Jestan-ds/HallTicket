@@ -88,6 +88,7 @@ import Signup from './components/Signup';
 import OTPVerification from './components/OTPVerification';
 import CompleteProfilePage from './components/CompleteProfile';
 import UploadStudentsPage from './pages/UploadStudentsPage';
+import NotificationHistory from './components/NotificationHistory';
 
 
 // Protected route component - checks authentication and role
@@ -175,8 +176,9 @@ function AppRoutes() {
         <Route path="exams/edit/:id" element={<EditExamForm />} />
         <Route path="students" element={<UploadStudentsPage/>} />
         <Route path="registrations" element={<RegistrationList />} />
-        {/* //<Route path="verify" element={<QRVerification />} /> */}
+        {/* <Route path="verify" element={<QRVerification />} /> */}
         {/* Admin catch-all for paths starting with /admin/ */}
+        <Route path="notifications/sent" element={<NotificationHistory/>}/>
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>
 

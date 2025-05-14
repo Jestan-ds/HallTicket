@@ -13,7 +13,7 @@ Notificationrouter.post('/send',authMiddleware, async (req, res) => {
     sendNotification(req, res);
 }
 );
-Notificationrouter.get('/sent', async (req, res) => {
+Notificationrouter.get('/sent',authMiddleware, async (req, res) => {
     getSentNotifications(req, res);
 }
 );

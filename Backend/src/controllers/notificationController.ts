@@ -250,49 +250,35 @@ export const markNotificationAsRead = async (req: Request, res: Response) => {
 export const getSentNotifications = async (req: Request, res: Response) => {
     try {
         // Check if the authenticated user has an admin role
+        // This relies on your authMiddleware populating req.user
+        console.log("User role:", req.user?.role); // Debugging line to check user role
         if (req.user?.role !== 'admin' && req.user?.role !== 'superadmin') {
             return res.status(403).json({ error: "Forbidden: Only administrators can view sent notifications" });
         }
 
-        // Fetch all notifications from the notifications table, ordered by creation date (newest first)
-        const sentNotificationsList = await db
+        // Fetch all notifications, joining with exams to get exam names for targeted notifications
+        const sentNotificationsWithExamNames = await db
             .select({
                 id: notifications.id,
                 message: notifications.message,
-                target: notifications.target,
+                target: notifications.target, // 'all' or exam ID
                 createdAt: notifications.created_at,
-                // You might join with exams table here if you want exam names for targeted notifications
-                // You might join with usersDetails if you track sent_by_user_id
+                examName: exams.name, // Get exam name if targeted at an exam
             })
             .from(notifications)
+            .leftJoin(exams, eq(notifications.target, exams.id)) // Left join with exams on target = exam.id
             .orderBy(desc(notifications.created_at)); // Order by creation date descending
 
-         // Optional: Join with exams to get exam names for targeted notifications
-         // This makes the frontend display more informative
-         const sentNotificationsWithExamNames = await db
-             .select({
-                 id: notifications.id,
-                 message: notifications.message,
-                 target: notifications.target, // 'all' or exam ID
-                 createdAt: notifications.created_at,
-                 examName: exams.name, // Get exam name if targeted at an exam
-             })
-             .from(notifications)
-             .leftJoin(exams, eq(notifications.target, exams.id)) // Left join with exams on target = exam.id
-             .orderBy(desc(notifications.created_at));
-
-
-        // Format dates for display on the frontend
+        // Format dates and target display for the frontend
         const formattedSentNotifications = sentNotificationsWithExamNames.map(notif => ({
             ...notif,
-             // Ensure dates are valid Date objects before formatting
             createdAtFormatted: notif.createdAt instanceof Date && !isNaN(notif.createdAt.getTime())
                 ? new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(notif.createdAt)
                 : 'N/A',
-             // Format the target for display
-             targetDisplay: notif.target === 'all' ? 'All Students' : `Students for ${notif.examName || notif.target}`,
+            targetDisplay: notif.target === 'all' 
+                ? 'All Students' 
+                : (notif.examName ? `Students for ${notif.examName}` : `Exam ID: ${notif.target}`),
         }));
-
 
         res.json({ success: true, data: formattedSentNotifications });
 
@@ -301,7 +287,3 @@ export const getSentNotifications = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Failed to fetch sent notifications" });
     }
 };
-
-
-// Remember to export all your controller functions
-// export { sendNotification, getStudentNotifications, markNotificationAsRead, getSentNotifications /* ... other controllers */ };

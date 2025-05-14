@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes";
 import cookieParser from "cookie-parser";
 import userDetailsRouter from "./routes/userDetailsRoutes";
 import Notificationrouter from "./routes/notificationRoutes";
+import path from "path";
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ app.use(cors(
 ));
 app.use(express.json());
 app.use(cookieParser())
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 // app.use(bodyParser.json());  // ✅ Parse JSON only for POST/PUT requests
 // app.use(bodyParser.urlencoded({ extended: true }));
 

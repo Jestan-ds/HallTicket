@@ -64,20 +64,20 @@ export default function Modal({ isOpen, onClose, title, children, size='md'  }: 
     >
       <div
         ref={modalContentRef}
-        className={`relative bg-white rounded-lg shadow-xl max-h-[90vh] overflow-y-auto w-full flex flex-col ${maxWidthClass}`} // Modal content styles
-        onClick={(e) => e.stopPropagation()} // Prevent click inside modal from closing it
+        className={`relative bg-white rounded-lg shadow-xl max-h-[90vh] overflow-y-auto w-full flex flex-col ${maxWidthClass}`} 
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0"> // Header styles
-          <h3 className="text-lg font-semibold text-gray-800">{title}</h3> // Title styles
+        <div className="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0"> 
+          <h3 className="text-lg font-semibold text-gray-800">{title}</h3> 
           <button
             onClick={onClose}
-            className="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" // Close button styles
+            className="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" 
             aria-label="Close modal"
           >
-            <X size={20} className="text-gray-500" /> // Icon color
+            <X size={20} className="text-gray-500" /> 
           </button>
         </div>
-        <div className="p-4 flex-grow"> // Body styles
+        <div className="p-4 flex-grow"> 
           {children}
         </div>
       </div>

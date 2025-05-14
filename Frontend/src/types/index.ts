@@ -153,3 +153,49 @@ export interface Registration1 {
   // Optional reject reason field (if stored in backend)
   reject_reason?: string | null; // Added reject_reason
 }
+
+// In your frontend types file (e.g., src/types.ts or similar)
+
+export interface UserSummary { // For nested user details
+    name: string;
+    email: string;
+    // any other user fields you include
+}
+
+export interface ExamSummary { // For nested exam details
+    name: string;
+    exam_date: string; // Formatted date string
+    exam_time?: string | null;
+    exam_duration?: string;
+    exam_fee?: string | number; // Or just number if always number
+    // any other exam fields you include
+}
+
+export interface LocationSummary { // If you nest location details
+    name: string;
+    address?: string;
+    city?: string;
+    state?: string;
+}
+
+
+export interface Registration2 {
+    application_id: string;
+    user_id: number; // Or string, depends on your backend
+    exam_id: string;
+    registration_date: string; // Formatted date string from backend
+    status: 'pending' | 'approved' | 'rejected';
+    payment_status: 'pending' | 'completed'; // Assuming these are the only two
+    hall_ticket_url: string | null;
+    exam_mode: 'online' | 'offline';
+    assigned_location: string | null; // Or LocationSummary if nested object
+    seat_number: string | null;
+    selected_exam_time: string | null;
+    reject_reason?: string | null; // If you add this field
+
+    user: UserSummary | null; // Allow user to be null if it might not be present
+    exam: ExamSummary | null; // Allow exam to be null
+    location?: LocationSummary | null; // Optional, if you join and format location data
+
+    // Add any other fields that your formatRegistrationForFrontend function includes
+}

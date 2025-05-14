@@ -21,6 +21,7 @@ const Sidebar: React.FC = () => {
     { name: 'Exams', path: '/admin/exams', icon: <FileText size={20} /> },
     { name: 'Students', path: '/admin/students', icon: <Users size={20} /> },
     { name: 'Registrations', path: '/admin/registrations', icon: <ClipboardList size={20} /> },
+    //{ name: 'QR Verification', path: '/admin/verify', icon: <QrCode size={20} /> },
     // Changed the 'Settings' link to 'Notification History'
     { name: 'Notification History', path: '/admin/notifications/sent', icon: <Bell size={20} /> }, // Updated path and icon
   ];
